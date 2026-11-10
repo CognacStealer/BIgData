@@ -302,8 +302,8 @@ def build():
                      f"{fmt(ing['entity_counts']['user'])})"],
         ["Edits analysed", f"{fmt(prep['rows_final'])} after cleaning "
                            f"({100*(prep['rows_in']-prep['rows_final'])/prep['rows_in']:.2f}% removed)"],
-        ["Attributes used", "28 of 78 columns: actor, page, namespace, byte "
-                            "sizes, comment, cadence, revert links, tags"],
+        ["Attributes used", f"{ing['columns_kept']} of 78 columns: actor, page, namespace, "
+                            f"byte sizes, comment, cadence, revert links, tags"],
         ["Labels", f"label_bot {bot_pct:.1f}% positive; "
                    f"label_reverted {rev_pct:.1f}% positive"],
         ["Editors", f"{fmt(feat['n_editors'])} distinct actors "
@@ -712,8 +712,8 @@ for algo in (KMeans, BisectingKMeans,
     table(s, ["Stage", "Parallelisation mechanism"], [
         ["Raw TSV read", "bz2 IS splittable in Hadoop, so the 951 MB file is "
                          "read by 12 concurrent tasks (gzip would be one task)"],
-        ["Column projection", "Parquet keeps 28 of 78 columns, so later phases "
-                              "read roughly a third of the bytes"],
+        ["Column projection", f"Parquet keeps {ing['columns_kept']} of 78 columns, so later "
+                              f"phases read roughly a third of the bytes"],
         ["Feature engineering", "row-local withColumn — embarrassingly "
                                 "parallel, no shuffle"],
         ["Editor aggregation", "groupBy + window lag → sort-merge shuffle "

@@ -26,7 +26,7 @@ earns its place for three concrete reasons:
 | Pipeline stage | Parallelisation mechanism |
 |---|---|
 | Raw TSV read | bz2 **is splittable** in Hadoop, so the 1 GB file is read by many concurrent tasks. (A gzip dump would have been a single task — a real design trap.) |
-| Column projection | Phase 0 writes Parquet and keeps 28 of 78 columns, so later phases read ~⅓ of the bytes via columnar pruning. |
+| Column projection | Phase 0 writes Parquet and keeps 31 of 78 columns, so later phases read ~⅓ of the bytes via columnar pruning. |
 | Label partitioning | `prepared/` is partitioned by `label_bot`, so class-conditional queries prune whole directories. |
 | Feature engineering | Fully row-local (`withColumn`) → embarrassingly parallel, no shuffle. |
 | Editor aggregation | `groupBy` + window → sort-merge shuffle across 48 partitions. |

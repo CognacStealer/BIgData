@@ -21,8 +21,16 @@ classify: ## Phase 5a: classification
 	source env.sh && $(PY) -u src/run_all.py --only p05_classification
 cluster: ## Phase 5b: clustering
 	source env.sh && $(PY) -u src/run_all.py --only p05_clustering
-report: ## Phase 6: figures and tables
+figures: ## Phase 6: figures and tables
 	source env.sh && $(PY) -u src/run_all.py --only p06_report
+
+report: ## build the final report (.docx + .pdf) from reports/metrics
+	node src/make_report.js
+	@zip -d reports/MMDS_EndSem_Report.docx '*/' >/dev/null 2>&1 || true
+	@command -v /opt/libreoffice26.8/program/soffice >/dev/null && \
+	  /opt/libreoffice26.8/program/soffice --headless --convert-to pdf \
+	    --outdir reports reports/MMDS_EndSem_Report.docx >/dev/null 2>&1 || \
+	  echo "(install LibreOffice to also emit the PDF)"
 
 ppt: ## build the presentation from reports/metrics (needs MMDS_TEMPLATE)
 	source env.sh && $(PY) -u src/make_ppt.py

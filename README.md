@@ -72,8 +72,10 @@ make smoke
 | `make features` | `src/p04_features.py` | **Phase 4** feature engineering + TF-IDF/SVD |
 | `make classify` | `src/p05_classification.py` | **Phase 5a + 6** LR / RF / GBT |
 | `make cluster` | `src/p05_clustering.py` | **Phase 5b + 6** KMeans / Bisecting / GMM |
-| `make report` | `src/p06_report.py` | **Phase 6** figures and comparison tables |
+| `make figures` | `src/p06_report.py` | **Phase 6** figures and comparison tables |
 | `make stream` | `src/stream_collector.py` | live demo collector |
+| `make ppt` | `src/make_ppt.py` | build the 23-slide presentation |
+| `make report` | `src/make_report.js` | build the 15-page report (.docx) |
 
 Outputs: `reports/metrics/*.json|csv` and `reports/figures/*.png`.
 
@@ -144,6 +146,8 @@ descriptive summary, not a set of discovered natural classes.
 
 | File | Contents |
 |---|---|
+| `reports/MMDS_EndSem_Report.docx` | 15-page final report (Phase 8), generated from the metrics by `src/make_report.js` |
+| `reports/MMDS_EndSem_Report.pdf` | the same report as PDF |
 | `reports/MMDS_EndSem_Wikimedia_Bot_Detection.pptx` | 23-slide presentation, generated from the metrics by `src/make_ppt.py` |
 | `reports/metrics/*.json` | per-phase metrics, including the full sweep |
 | `reports/metrics/classification_comparison.csv` | the table above |
