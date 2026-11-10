@@ -1,8 +1,19 @@
+# Pipeline (Phases 0-6)
 pyspark==3.5.3
 pandas
 pyarrow
+numpy
+scipy
 matplotlib
 seaborn
 scikit-learn
+
+# Live EventStreams demo collector
 requests
 sseclient-py
+
+# Presentation generator (src/make_ppt.py)
+python-pptx
+
+# The report generator (src/make_report.js) is Node, not Python:
+#   npm install        # installs the `docx` package from package.json

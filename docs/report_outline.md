@@ -1,4 +1,15 @@
-# Phase 8: Final Report Outline (10–15 pages)
+# Phase 8: Final Report
+
+> **The report is written.** It is generated from `reports/metrics/*.json` by
+> `src/make_report.js` (`make report`) and lives at
+> `reports/MMDS_EndSem_Report.docx` (plus a rendered `.pdf`) — **15 pages**,
+> inside the recommended range. Regenerate it after any pipeline re-run so the
+> numbers stay in step.
+>
+> The outline below is kept as the section-to-artefact map, which is still the
+> useful part if you edit the document by hand.
+
+## Outline (10–15 pages)
 
 Each section names the artefact that supplies its numbers, so nothing has to be
 invented at writing time.

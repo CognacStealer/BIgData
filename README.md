@@ -38,10 +38,11 @@ most submissions never interrogate whether their label is valid.
 | Raw rows | **15,201,370** |
 | Edit (revision) rows | **11,023,987** |
 | After cleaning | **10,987,077** (0.34% dropped) |
-| Columns | 78 (the official docs say 76 — see below) |
+| Columns | 78 (the official docs say 76 — see below); **31 retained** |
+| Distinct editors | **780,867** (108,954 with ≥5 edits, used for clustering) |
 | Labels | 23.7% bot edits; 14.1% reverted edits |
 | Licence | CC0 |
-| Live feed | `stream.wikimedia.org/v2/stream/recentchange` (SSE), for the demo |
+| Live feed | `stream.wikimedia.org/v2/stream/recentchange` (SSE) — verified live at ~30 events/sec |
 
 ## 3. Quick start
 
