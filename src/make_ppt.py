@@ -14,8 +14,9 @@ from pathlib import Path
 
 from pptx import Presentation
 from pptx.dml.color import RGBColor
-from pptx.enum.shapes import MSO_SHAPE
-from pptx.enum.text import PP_ALIGN
+from pptx.enum.shapes import MSO_SHAPE, PP_PLACEHOLDER
+from pptx.enum.text import MSO_ANCHOR, PP_ALIGN
+from lxml import etree
 from pptx.util import Emu, Pt
 
 import config
@@ -68,6 +69,41 @@ def strip_slides(prs):
         ids.remove(sld)
 
 
+
+def add_slide_number(slide, prs, layout_idx=1):
+    """Clone the layout's slide-number placeholder, with a live slidenum field.
+
+    python-pptx copies only title/body placeholders onto a new slide, so
+    sldNum, date and footer placeholders are silently dropped and the deck
+    renders without page numbers.
+    """
+    import copy
+    ns = ("{http://schemas.openxmlformats.org/drawingml/2006/main}",
+          "{http://schemas.openxmlformats.org/presentationml/2006/main}")
+    A, P = ns
+    # Find by placeholder TYPE, not index: the layouts disagree on the index
+    # (12 on the content layouts, 2 on the closing one).
+    src = None
+    for ph in prs.slide_layouts[layout_idx].placeholders:
+        if ph.placeholder_format.type == PP_PLACEHOLDER.SLIDE_NUMBER:
+            src = ph
+            break
+    if src is None:
+        return
+    el = copy.deepcopy(src._element)
+    # replace the layout's prompt text with a real slide-number field
+    txBody = el.find(f"{P}txBody")
+    for para in txBody.findall(f"{A}p"):
+        txBody.remove(para)
+    para = etree.SubElement(txBody, f"{A}p")
+    fld = etree.SubElement(para, f"{A}fld")
+    fld.set("id", "{71766878-3199-4EAB-94E7-2D6D11070E14}")
+    fld.set("type", "slidenum")
+    etree.SubElement(fld, f"{A}rPr").set("lang", "en-US")
+    etree.SubElement(fld, f"{A}t").text = "1"
+    slide.shapes._spTree.append(el)
+
+
 def new_slide(prs, title, layout=1):
     s = prs.slides.add_slide(prs.slide_layouts[layout])
     # Use the layout's title placeholder where present, else make a textbox.
@@ -84,16 +120,19 @@ def new_slide(prs, title, layout=1):
         ph.width, ph.height = Emu(T_TITLE["width"]), Emu(T_TITLE["height"])
     tf = ph.text_frame
     tf.clear()
-    r = tf.paragraphs[0].add_run()
+    para = tf.paragraphs[0]
+    para.alignment = PP_ALIGN.CENTER        # the template centres slide titles
+    r = para.add_run()
     r.text = title
+    # Set ONLY the typeface. Size, weight and the maroon #A4123F colour are
+    # defined on the layout's title placeholder; overriding them here is what
+    # made the first render come out dark blue, bold and left-aligned.
     r.font.name = TITLE_FONT
-    r.font.size = Pt(28)
-    r.font.bold = True
-    r.font.color.rgb = MUTED
     # drop any stray body placeholder the layout brought along
     for p in list(s.placeholders):
         if p.placeholder_format.idx == 1:
             p._element.getparent().remove(p._element)
+    add_slide_number(s, prs)
     return s
 
 
@@ -107,16 +146,23 @@ def textbox(slide, geom, lines, size=19, font=BODY_FONT, color=None,
         para = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
         para.space_after = Pt(space_after)
         txt = f"•  {line}" if bullet else line
-        # inline **bold** support
-        parts = txt.split("**")
-        for j, part in enumerate(parts):
-            if not part:
+        # inline **bold** and *italic*. Without the italic branch the single
+        # asterisks render literally, e.g. "*accounts*".
+        import re as _re
+        for m in _re.finditer(r"(\*\*[^*]+\*\*|\*[^*\n]+\*|[^*]+|\*)", txt):
+            tok = m.group(0)
+            if not tok:
                 continue
+            bold = tok.startswith("**") and tok.endswith("**") and len(tok) > 4
+            ital = (not bold and tok.startswith("*") and tok.endswith("*")
+                    and len(tok) > 2)
+            body = tok[2:-2] if bold else (tok[1:-1] if ital else tok)
             r = para.add_run()
-            r.text = part
+            r.text = body
             r.font.name = font
             r.font.size = Pt(size)
-            r.font.bold = (j % 2 == 1) or (bold_first and i == 0)
+            r.font.bold = bold or (bold_first and i == 0)
+            r.font.italic = ital
             r.font.color.rgb = color or RGBColor(0x00, 0x00, 0x00)
     return box
 
@@ -131,14 +177,19 @@ def code_block(slide, geom, caption, code, size=11):
     rect.shadow.inherit = False
     tf = rect.text_frame
     tf.word_wrap = True
-    tf.margin_left = Pt(8); tf.margin_right = Pt(8)
-    tf.margin_top = Pt(6); tf.margin_bottom = Pt(6)
+    tf.margin_left = Pt(10); tf.margin_right = Pt(8)
+    tf.margin_top = Pt(8); tf.margin_bottom = Pt(6)
+    # AutoShapes centre their text both ways by default, which destroys code
+    # indentation. Anchor top-left explicitly on every paragraph.
+    tf.vertical_anchor = MSO_ANCHOR.TOP
     p0 = tf.paragraphs[0]
+    p0.alignment = PP_ALIGN.LEFT
     r = p0.add_run(); r.text = caption
     r.font.name = CODE_FONT; r.font.size = Pt(12); r.font.bold = True
     r.font.color.rgb = ACCENT
     for line in code.strip("\n").split("\n"):
         para = tf.add_paragraph()
+        para.alignment = PP_ALIGN.LEFT
         para.space_after = Pt(0)
         rr = para.add_run(); rr.text = line
         rr.font.name = CODE_FONT; rr.font.size = Pt(size)
@@ -254,15 +305,18 @@ def build():
                 "Mining of Massive Datasets (23CSE355) — End Semester Project",
                 "Spark MLlib on 11.0 million Wikimedia edits: "
                 "bot classification and editor clustering",
-                "Team _No: [Team No]        Project Advisor: [Advisor Name]",
+                "Team _No: [Team No]          Project Advisor: [Advisor Name]",
             ]):
                 para = p.text_frame.paragraphs[0] if i == 0 else p.text_frame.add_paragraph()
                 r = para.add_run(); r.text = line
                 r.font.name = BODY_FONT; r.font.size = Pt(18)
+    # The subtitle placeholder autosizes downward; keep the roster table clear
+    # of it or the two collide.
     table(s, ["Sl. No.", "Reg. No.", "Name of the student"],
           [[str(i), f"[Reg No {i}]", f"[Name {i}]"] for i in range(1, 5)],
-          geom=dict(left=3000000, top=4400000, width=6200000, height=1600000),
+          geom=dict(left=3300000, top=4800000, width=5600000, height=1400000),
           size=14, col_widths=[1, 2, 3])
+    add_slide_number(s, prs, layout_idx=0)
 
     # ---- 2 introduction ---------------------------------------------------
     s = new_slide(prs, "Introduction")
@@ -338,7 +392,7 @@ def build():
     s = new_slide(prs, "Pipeline Architecture")
     boxes = [
         ("Raw dump\n951 MB bz2 TSV\n78 columns", 400000),
-        ("Phase 0\nIngest\nTSV → Parquet\n28 cols kept", 2650000),
+        (f"Phase 0\nIngest\nTSV \u2192 Parquet\n{ing['columns_kept']} cols kept", 2650000),
         ("Phase 3\nPrepare\ndedup, impute,\nlabels", 4900000),
         ("Phase 4\nFeatures\n35 numeric\n+ 24-dim SVD", 7150000),
         ("Phase 5/6\nMLlib\n3 classifiers\n3 clusterers", 9400000),
@@ -641,9 +695,10 @@ for algo in (KMeans, BisectingKMeans,
 
     # ---- 16 clustering sweep ---------------------------------------------
     s = new_slide(prs, "Phase 6: Clustering Quality and Model Selection")
+    # pin to the left half: the default centring runs under the text panel
     figure(s, config.FIGURES / "clustering_silhouette.png",
-           top=1200000, height=3500000)
-    textbox(s, dict(left=7600000, top=1250000, width=3900000, height=3400000), [
+           top=1250000, width=6700000, left=400000, max_bottom=4950000)
+    textbox(s, dict(left=7300000, top=1250000, width=4300000, height=3500000), [
         f"Editors clustered: **{fmt(clu['n_editors_clustered'])}** of "
         f"{fmt(clu['n_editors_total'])} (minimum {clu['min_edits']} edits — "
         f"single-edit accounts dominate the tail).",
@@ -890,11 +945,17 @@ for algo in (KMeans, BisectingKMeans,
     s = prs.slides.add_slide(prs.slide_layouts[2])
     for p in s.placeholders:
         if p.placeholder_format.idx == 0:
+            p.left, p.top = Emu(1500000), Emu(2500000)
+            p.width, p.height = Emu(9200000), Emu(1400000)
             p.text_frame.clear()
+            p.text_frame.vertical_anchor = MSO_ANCHOR.MIDDLE
             para = p.text_frame.paragraphs[0]
             para.alignment = PP_ALIGN.CENTER
+            # the template's closing slide is large, centred and NOT bold
             r = para.add_run(); r.text = "THANK YOU"
-            r.font.name = TITLE_FONT; r.font.size = Pt(44); r.font.bold = True
+            r.font.name = TITLE_FONT; r.font.size = Pt(54); r.font.bold = False
+            r.font.color.rgb = RGBColor(0x00, 0x00, 0x00)
+    add_slide_number(s, prs, layout_idx=2)
 
     return prs
 
