@@ -1,0 +1,52 @@
+{
+  "rows_in": 11023987,
+  "rows_after_dedup": 11023987,
+  "rows_final": 10987077,
+  "duplicates_removed": 0,
+  "null_key_rows_removed": 36910,
+  "null_counts": {
+    "event_comment": 2940518,
+    "event_user_id": 2048747,
+    "event_user_text": 6553,
+    "event_user_is_bot_by": 8419962,
+    "event_user_groups": 6911617,
+    "event_user_revision_count": 2048747,
+    "event_user_seconds_since_previous_revision": 2241578,
+    "event_user_registration_timestamp": 2325416,
+    "page_id": 35707,
+    "page_title": 1203,
+    "page_namespace": 1203,
+    "page_revision_count": 35714,
+    "revision_parent_id": 245733,
+    "revision_text_bytes": 17126,
+    "revision_text_bytes_diff": 26554,
+    "revision_seconds_to_identity_revert": 9473072,
+    "revision_tags": 7546763
+  },
+  "bot_edits": 2598870,
+  "bot_rate": 0.23653879917288284,
+  "reverted_edits": 1550915,
+  "reverted_rate": 0.1411581078388729,
+  "label_crosstab": [
+    {
+      "label_bot": 0,
+      "label_reverted": 0,
+      "count": 7037470
+    },
+    {
+      "label_bot": 0,
+      "label_reverted": 1,
+      "count": 1350737
+    },
+    {
+      "label_bot": 1,
+      "label_reverted": 0,
+      "count": 2398692
+    },
+    {
+      "label_bot": 1,
+      "label_reverted": 1,
+      "count": 200178
+    }
+  ]
+}

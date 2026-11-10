@@ -1,0 +1,3 @@
+cluster,n_editors,e_log_n_edits,e_n_namespaces,e_minor_ratio,e_content_ratio,e_reverted_ratio,e_night_ratio,e_weekend_ratio,e_cmt_len_mean,e_cmt_section_ratio,e_cmt_empty_ratio,e_abs_diff_mean,e_abs_diff_median,e_diff_sign_mean,e_log_gap_mean,e_gap_cv,e_span_days,e_active_days,e_edits_per_active_day,e_pages_per_edit,bot_share,mean_edits
+0,82951,2.365,1.38,0.026,0.876,0.396,0.198,0.234,16.549,0.204,0.606,1050.955,429.557,0.431,8.922,1.727,190.428,2.603,7.104,0.489,0.0007,12.5
+1,26003,3.441,3.167,0.208,0.604,0.166,0.201,0.263,48.228,0.186,0.349,1205.502,357.121,0.53,12.367,3.661,1091.532,23.245,10.533,0.592,0.0132,344.1

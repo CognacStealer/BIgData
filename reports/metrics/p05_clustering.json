@@ -1,0 +1,302 @@
+{
+  "n_editors_total": 780867,
+  "n_editors_clustered": 108954,
+  "min_edits": 5,
+  "features_used": [
+    "e_log_n_edits",
+    "e_n_namespaces",
+    "e_minor_ratio",
+    "e_content_ratio",
+    "e_reverted_ratio",
+    "e_night_ratio",
+    "e_weekend_ratio",
+    "e_cmt_len_mean",
+    "e_cmt_section_ratio",
+    "e_cmt_empty_ratio",
+    "e_abs_diff_mean",
+    "e_abs_diff_median",
+    "e_diff_sign_mean",
+    "e_log_gap_mean",
+    "e_gap_cv",
+    "e_span_days",
+    "e_active_days",
+    "e_edits_per_active_day",
+    "e_pages_per_edit"
+  ],
+  "sweep": {
+    "kmeans": {
+      "2": {
+        "silhouette": 0.1779987973894129,
+        "cluster_sizes": [
+          61186,
+          47768
+        ]
+      },
+      "3": {
+        "silhouette": 0.13106541020910867,
+        "cluster_sizes": [
+          60075,
+          30350,
+          18529
+        ]
+      },
+      "4": {
+        "silhouette": 0.11623664590691965,
+        "cluster_sizes": [
+          47742,
+          32775,
+          16310,
+          12127
+        ]
+      },
+      "5": {
+        "silhouette": 0.0851499073136489,
+        "cluster_sizes": [
+          39329,
+          26559,
+          16012,
+          14908,
+          12146
+        ]
+      },
+      "6": {
+        "silhouette": 0.13248842322616305,
+        "cluster_sizes": [
+          35077,
+          21911,
+          21604,
+          15437,
+          13221,
+          1704
+        ]
+      },
+      "7": {
+        "silhouette": 0.17857050126779422,
+        "cluster_sizes": [
+          40715,
+          22362,
+          16161,
+          15383,
+          12802,
+          1523,
+          8
+        ]
+      },
+      "8": {
+        "silhouette": 0.14946445442857983,
+        "cluster_sizes": [
+          29293,
+          19527,
+          19038,
+          15340,
+          14579,
+          10056,
+          1113,
+          8
+        ]
+      }
+    },
+    "bisecting_kmeans": {
+      "2": {
+        "silhouette": null,
+        "cluster_sizes": [
+          108954
+        ],
+        "note": "degenerate: <2 non-empty clusters"
+      },
+      "3": {
+        "silhouette": 0.3405801427146414,
+        "cluster_sizes": [
+          82951,
+          26003
+        ]
+      },
+      "4": {
+        "silhouette": 0.10307097373318976,
+        "cluster_sizes": [
+          58013,
+          26003,
+          24938
+        ]
+      },
+      "5": {
+        "silhouette": 0.14577521531317036,
+        "cluster_sizes": [
+          58013,
+          24938,
+          24890,
+          1113
+        ]
+      },
+      "6": {
+        "silhouette": 0.06418170089570124,
+        "cluster_sizes": [
+          29754,
+          28259,
+          24938,
+          24890,
+          1113
+        ]
+      },
+      "7": {
+        "silhouette": 0.042997272806365755,
+        "cluster_sizes": [
+          29754,
+          28259,
+          24890,
+          12549,
+          12389,
+          1113
+        ]
+      },
+      "8": {
+        "silhouette": 0.06571619082630858,
+        "cluster_sizes": [
+          29754,
+          28259,
+          14560,
+          12549,
+          12389,
+          10330,
+          1113
+        ]
+      }
+    },
+    "gaussian_mixture": {
+      "2": {
+        "silhouette": 0.11317148349462122,
+        "cluster_sizes": [
+          65243,
+          43711
+        ]
+      },
+      "3": {
+        "silhouette": 0.2657698225900673,
+        "cluster_sizes": [
+          82004,
+          21255,
+          5695
+        ]
+      },
+      "4": {
+        "silhouette": 0.0710730897169902,
+        "cluster_sizes": [
+          53505,
+          40067,
+          13447,
+          1935
+        ]
+      },
+      "5": {
+        "silhouette": 0.07784105714566399,
+        "cluster_sizes": [
+          44856,
+          44575,
+          17160,
+          1802,
+          561
+        ]
+      },
+      "6": {
+        "silhouette": 0.1287923354355091,
+        "cluster_sizes": [
+          63723,
+          39033,
+          3439,
+          2311,
+          444,
+          4
+        ]
+      },
+      "7": {
+        "silhouette": 0.1473660351297792,
+        "cluster_sizes": [
+          60778,
+          21684,
+          19969,
+          5645,
+          744,
+          93,
+          41
+        ]
+      },
+      "8": {
+        "silhouette": 0.0723631139608036,
+        "cluster_sizes": [
+          38418,
+          34464,
+          19578,
+          13202,
+          1857,
+          840,
+          527,
+          68
+        ]
+      }
+    }
+  },
+  "best": "bisecting_kmeans_k3",
+  "best_silhouette": 0.3405801427146414,
+  "best_k_requested": 3,
+  "best_k_nonempty": 2,
+  "bot_editor_count": 401.3053,
+  "bot_editor_rate": 0.003683254400939846,
+  "bot_purity": 0.9963167455990601,
+  "bot_purity_baseline": 0.9963167455990601,
+  "bot_purity_lift_over_baseline": 0.0,
+  "bot_max_enrichment": 3.58,
+  "cluster_profiles": [
+    {
+      "cluster": 0,
+      "n_editors": 82951,
+      "e_log_n_edits": 2.365,
+      "e_n_namespaces": 1.38,
+      "e_minor_ratio": 0.026,
+      "e_content_ratio": 0.876,
+      "e_reverted_ratio": 0.396,
+      "e_night_ratio": 0.198,
+      "e_weekend_ratio": 0.234,
+      "e_cmt_len_mean": 16.549,
+      "e_cmt_section_ratio": 0.204,
+      "e_cmt_empty_ratio": 0.606,
+      "e_abs_diff_mean": 1050.955,
+      "e_abs_diff_median": 429.557,
+      "e_diff_sign_mean": 0.431,
+      "e_log_gap_mean": 8.922,
+      "e_gap_cv": 1.727,
+      "e_span_days": 190.428,
+      "e_active_days": 2.603,
+      "e_edits_per_active_day": 7.104,
+      "e_pages_per_edit": 0.489,
+      "bot_share": 0.0007,
+      "mean_edits": 12.5,
+      "bot_lift": 0.19
+    },
+    {
+      "cluster": 1,
+      "n_editors": 26003,
+      "e_log_n_edits": 3.441,
+      "e_n_namespaces": 3.167,
+      "e_minor_ratio": 0.208,
+      "e_content_ratio": 0.604,
+      "e_reverted_ratio": 0.166,
+      "e_night_ratio": 0.201,
+      "e_weekend_ratio": 0.263,
+      "e_cmt_len_mean": 48.228,
+      "e_cmt_section_ratio": 0.186,
+      "e_cmt_empty_ratio": 0.349,
+      "e_abs_diff_mean": 1205.502,
+      "e_abs_diff_median": 357.121,
+      "e_diff_sign_mean": 0.53,
+      "e_log_gap_mean": 12.367,
+      "e_gap_cv": 3.661,
+      "e_span_days": 1091.532,
+      "e_active_days": 23.245,
+      "e_edits_per_active_day": 10.533,
+      "e_pages_per_edit": 0.592,
+      "bot_share": 0.0132,
+      "mean_edits": 344.1,
+      "bot_lift": 3.58
+    }
+  ]
+}

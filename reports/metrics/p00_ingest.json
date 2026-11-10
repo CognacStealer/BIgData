@@ -1,0 +1,12 @@
+{
+  "wiki": "simplewiki",
+  "snapshot": "2026-10",
+  "raw_rows": 15201370,
+  "entity_counts": {
+    "revision": 11023987,
+    "page": 2231160,
+    "user": 1946223
+  },
+  "revision_rows": 11023987,
+  "columns_kept": 31
+}

@@ -1,0 +1,41 @@
+# Convenience wrapper. Everything needs `source env.sh` first; these targets
+# do it for you.
+SHELL := /bin/bash
+PY := .venv/bin/python
+
+.PHONY: help all ingest prepare features classify cluster report smoke stream clean-derived
+
+help:
+	@grep -E '^[a-z-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-16s\033[0m %s\n",$$1,$$2}'
+
+all: ## run every phase in order
+	source env.sh && $(PY) -u src/run_all.py
+
+ingest: ## Phase 0: bz2 TSV -> Parquet
+	source env.sh && $(PY) -u src/run_all.py --only p00_ingest
+prepare: ## Phase 3: cleaning and labels
+	source env.sh && $(PY) -u src/run_all.py --only p03_prepare
+features: ## Phase 4: feature engineering + SVD
+	source env.sh && $(PY) -u src/run_all.py --only p04_features
+classify: ## Phase 5a: classification
+	source env.sh && $(PY) -u src/run_all.py --only p05_classification
+cluster: ## Phase 5b: clustering
+	source env.sh && $(PY) -u src/run_all.py --only p05_clustering
+report: ## Phase 6: figures and tables
+	source env.sh && $(PY) -u src/run_all.py --only p06_report
+
+ppt: ## build the presentation from reports/metrics (needs MMDS_TEMPLATE)
+	source env.sh && $(PY) -u src/make_ppt.py
+
+smoke: ## fast end-to-end check on a tiny real-data fixture
+	source env.sh && $(PY) -u tests/smoke_test.py
+
+stream: ## collect 2 min of live edits for the demo
+	source env.sh && $(PY) -u src/stream_collector.py --minutes 2
+
+data/raw/simplewiki.all-time.tsv.bz2: ## download the dump (951 MB)
+	mkdir -p data/raw && curl -L --retry 3 -o $@ \
+	  https://dumps.wikimedia.org/other/mediawiki_history/2026-10/simplewiki/2026-10.simplewiki.all-time.tsv.bz2
+
+clean-derived: ## delete everything derived, keep the raw dump
+	rm -rf data/parquet data/features data/_smoke reports/figures/* reports/metrics/*
