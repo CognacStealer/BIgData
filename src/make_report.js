@@ -44,7 +44,7 @@ function inline(text, opts = {}) {
   const out = [];
   // Order matters: code spans are matched before single-asterisk italics so
   // that identifiers like `page_*` and `*_historical` keep their asterisks.
-  const re = /(\*\*[^*]+\*\*|`[^`]+`|\*[^*`\n]+\*)/g;
+  const re = /(\*\*.+?\*\*|`[^`]+`|\*[^*`\n]+\*)/g;
   let last = 0, m;
   while ((m = re.exec(text)) !== null) {
     if (m.index > last) out.push(run(text.slice(last, m.index), opts));

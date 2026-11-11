@@ -149,7 +149,9 @@ def textbox(slide, geom, lines, size=19, font=BODY_FONT, color=None,
         # inline **bold** and *italic*. Without the italic branch the single
         # asterisks render literally, e.g. "*accounts*".
         import re as _re
-        for m in _re.finditer(r"(\*\*[^*]+\*\*|\*[^*\n]+\*|[^*]+|\*)", txt):
+        # Bold is non-greedy and allows inner asterisks, so "**local[*]**"
+        # is one bold span instead of a stray "*" plus italic "local[".
+        for m in _re.finditer(r"(\*\*.+?\*\*|\*[^*\n]+\*|[^*]+|\*)", txt):
             tok = m.group(0)
             if not tok:
                 continue
