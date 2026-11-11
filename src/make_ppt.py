@@ -168,6 +168,13 @@ def textbox(slide, geom, lines, size=19, font=BODY_FONT, color=None,
 
 
 def code_block(slide, geom, caption, code, size=11):
+    # Shrink to fit: a block that outgrows its rectangle spills its last lines
+    # below the border, which is invisible in the XML and only shows on render.
+    lines = code.strip("\n").split("\n")
+    avail_pt = geom["height"] / 12700 - 16          # minus top/bottom margins
+    while size > 7 and (12 * 1.22 + len(lines) * size * 1.22) > avail_pt:
+        size -= 0.5
+
     rect = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
                                   Emu(geom["left"]), Emu(geom["top"]),
                                   Emu(geom["width"]), Emu(geom["height"]))
@@ -187,7 +194,7 @@ def code_block(slide, geom, caption, code, size=11):
     r = p0.add_run(); r.text = caption
     r.font.name = CODE_FONT; r.font.size = Pt(12); r.font.bold = True
     r.font.color.rgb = ACCENT
-    for line in code.strip("\n").split("\n"):
+    for line in lines:
         para = tf.add_paragraph()
         para.alignment = PP_ALIGN.LEFT
         para.space_after = Pt(0)
