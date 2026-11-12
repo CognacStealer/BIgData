@@ -24,6 +24,15 @@ cluster: ## Phase 5b: clustering
 figures: ## Phase 6: figures and tables
 	source env.sh && $(PY) -u src/run_all.py --only p06_report
 
+live-train: ## train + save the live-servable bot classifier (~6 min)
+	source env.sh && $(PY) -u src/pf_live_train.py
+
+live-calibrate: ## pick the F1-optimal decision threshold (needs live-train)
+	source env.sh && $(PY) -u src/pf_live_calibrate.py
+
+live-demo: ## LIVE DEMO: classify real Wikimedia edits as they arrive
+	source env.sh && $(PY) -u src/pf_live_demo.py --minutes 3
+
 rdd: ## RDD-based processing over the raw dump
 	source env.sh && $(PY) -u src/pb_rdd.py
 sql: ## DataFrame + Spark SQL analytics

@@ -147,13 +147,16 @@ def main():
           .start())
 
     t.join()
-    deadline = time.time() + 60
-    while time.time() < deadline:
-        if (STATE["running"]["rows"] >= args.batches * args.rows
-                and not q1.status["isDataAvailable"]):
-            break
-        time.sleep(2)
-    q1.stop(); q2.stop()
+    # Drain every file the producer wrote before stopping. Calling stop() while
+    # a micro-batch is still in flight makes the memory sink abort its epoch and
+    # print a red "MicroBatchWrite ... is aborting" ERROR -- harmless, but it
+    # looks like a failure during a demo.
+    for q in (q1, q2):
+        try:
+            q.processAllAvailable()
+        except Exception:
+            pass
+    q2.stop(); q1.stop()
 
     win = spark.sql(
         "SELECT date_format(window.start,'yyyy') AS yr, edits, bot_share "

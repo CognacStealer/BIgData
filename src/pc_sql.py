@@ -86,6 +86,22 @@ def main():
     print(f"  busiest year: {peak['year']} with {peak['edits']:,} edits "
           f"({100*peak['bot_share']:.1f}% bot)")
 
+    # ---- Spark SQL: monthly trend (Part C example query) -----------------
+    mon = spark.sql("""
+        SELECT date_format(event_timestamp, 'yyyy-MM') AS ym,
+               COUNT(*) AS edits,
+               ROUND(AVG(label_bot), 4) AS bot_share
+        FROM wikimedia_edits
+        WHERE event_timestamp >= '2024-01-01'
+        GROUP BY 1 ORDER BY 1""").collect()
+    out["by_month"] = [{"month": r["ym"], "edits": r["edits"],
+                        "bot_share": float(r["bot_share"])} for r in mon]
+    if out["by_month"]:
+        pk = max(out["by_month"], key=lambda r: r["edits"])
+        out["peak_month"] = pk
+        print(f"  busiest month since 2024: {pk['month']} "
+              f"({pk['edits']:,} edits, {100*pk['bot_share']:.1f}% bot)")
+
     # ---- Spark SQL: most edited pages ------------------------------------
     pages = spark.sql("""
         SELECT page_title, COUNT(*) AS edits

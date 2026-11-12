@@ -1,0 +1,15 @@
+{
+  "roc_auc": 0.9796956990043634,
+  "pr_auc": 0.9351681398552447,
+  "accuracy": 0.9654908652414571,
+  "f1": 0.9646815955842555,
+  "bot_precision": 0.9453524467825505,
+  "bot_recall": 0.8421543548158783,
+  "bot_f1": 0.8907744341804472,
+  "n_train": 8619472,
+  "n_test": 2367605,
+  "shared_actors": 0,
+  "n_features": 25,
+  "note": "live-servable subset; batch model uses richer columns",
+  "model_path": "/home/tsuki/BIgData/models/live_bot_rf"
+}

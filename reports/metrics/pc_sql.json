@@ -1,7 +1,7 @@
 {
   "rows": 10987077,
   "columns": 31,
-  "df_api_seconds": 0.8548047542572021,
+  "df_api_seconds": 1.1274898052215576,
   "namespaces": [
     {
       "namespace": 0,
@@ -74,7 +74,7 @@
       "revert_rate": 0.1269
     }
   ],
-  "sql_seconds": 0.9020650386810303,
+  "sql_seconds": 1.1243476867675781,
   "by_label_bot": [
     {
       "label_bot": 0,
@@ -225,6 +225,188 @@
     "year": 2012,
     "edits": 771344,
     "bot_share": 0.4533
+  },
+  "by_month": [
+    {
+      "month": "2024-01",
+      "edits": 57993,
+      "bot_share": 0.0622
+    },
+    {
+      "month": "2024-02",
+      "edits": 52549,
+      "bot_share": 0.0637
+    },
+    {
+      "month": "2024-03",
+      "edits": 64367,
+      "bot_share": 0.0554
+    },
+    {
+      "month": "2024-04",
+      "edits": 64908,
+      "bot_share": 0.0596
+    },
+    {
+      "month": "2024-05",
+      "edits": 57407,
+      "bot_share": 0.077
+    },
+    {
+      "month": "2024-06",
+      "edits": 49100,
+      "bot_share": 0.0608
+    },
+    {
+      "month": "2024-07",
+      "edits": 53231,
+      "bot_share": 0.0686
+    },
+    {
+      "month": "2024-08",
+      "edits": 63404,
+      "bot_share": 0.0728
+    },
+    {
+      "month": "2024-09",
+      "edits": 57789,
+      "bot_share": 0.0721
+    },
+    {
+      "month": "2024-10",
+      "edits": 57949,
+      "bot_share": 0.061
+    },
+    {
+      "month": "2024-11",
+      "edits": 58235,
+      "bot_share": 0.0787
+    },
+    {
+      "month": "2024-12",
+      "edits": 69165,
+      "bot_share": 0.0717
+    },
+    {
+      "month": "2025-01",
+      "edits": 64130,
+      "bot_share": 0.0627
+    },
+    {
+      "month": "2025-02",
+      "edits": 59051,
+      "bot_share": 0.0747
+    },
+    {
+      "month": "2025-03",
+      "edits": 55260,
+      "bot_share": 0.0738
+    },
+    {
+      "month": "2025-04",
+      "edits": 64378,
+      "bot_share": 0.0579
+    },
+    {
+      "month": "2025-05",
+      "edits": 73831,
+      "bot_share": 0.065
+    },
+    {
+      "month": "2025-06",
+      "edits": 62877,
+      "bot_share": 0.0509
+    },
+    {
+      "month": "2025-07",
+      "edits": 65577,
+      "bot_share": 0.1036
+    },
+    {
+      "month": "2025-08",
+      "edits": 58353,
+      "bot_share": 0.078
+    },
+    {
+      "month": "2025-09",
+      "edits": 54995,
+      "bot_share": 0.0501
+    },
+    {
+      "month": "2025-10",
+      "edits": 60909,
+      "bot_share": 0.0613
+    },
+    {
+      "month": "2025-11",
+      "edits": 50696,
+      "bot_share": 0.0563
+    },
+    {
+      "month": "2025-12",
+      "edits": 39617,
+      "bot_share": 0.0804
+    },
+    {
+      "month": "2026-01",
+      "edits": 39650,
+      "bot_share": 0.1103
+    },
+    {
+      "month": "2026-02",
+      "edits": 31926,
+      "bot_share": 0.1254
+    },
+    {
+      "month": "2026-03",
+      "edits": 35529,
+      "bot_share": 0.1037
+    },
+    {
+      "month": "2026-04",
+      "edits": 37868,
+      "bot_share": 0.0956
+    },
+    {
+      "month": "2026-05",
+      "edits": 35602,
+      "bot_share": 0.1694
+    },
+    {
+      "month": "2026-06",
+      "edits": 29856,
+      "bot_share": 0.1489
+    },
+    {
+      "month": "2026-07",
+      "edits": 41166,
+      "bot_share": 0.2422
+    },
+    {
+      "month": "2026-08",
+      "edits": 32399,
+      "bot_share": 0.1624
+    },
+    {
+      "month": "2026-09",
+      "edits": 33711,
+      "bot_share": 0.1973
+    },
+    {
+      "month": "2026-10",
+      "edits": 33795,
+      "bot_share": 0.1559
+    },
+    {
+      "month": "2026-11",
+      "edits": 348,
+      "bot_share": 0.1954
+    }
+  ],
+  "peak_month": {
+    "month": "2025-05",
+    "edits": 73831,
+    "bot_share": 0.065
   },
   "top_pages": [
     {

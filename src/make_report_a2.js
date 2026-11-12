@@ -431,11 +431,63 @@ children.push(p(
   `Temporal aggregation shows activity peaking in **${sql.peak_year.year}** with ${N(sql.peak_year.edits)} edits, of which ${pct(sql.peak_year.bot_share, 1)} were automated — the high-water mark of bot activity on this wiki. The most edited article is \`${sql.top_pages[0].title}\` with ${N(sql.top_pages[0].edits)} revisions.`
 ));
 children.push(p(
+  `Aggregating at monthly rather than annual granularity over the recent period shows the busiest month to be **${sql.peak_month.month}** with ${N(sql.peak_month.edits)} edits at ${pct(sql.peak_month.bot_share, 1)} automation — far below the ${pct(sql.peak_year.bot_share, 1)} of the ${sql.peak_year.year} peak. Automated editing on this wiki has receded substantially since its height.`
+));
+children.push(table(["Month", "Edits", "Bot share"],
+  sql.by_month.slice(-8).map((r) => [r.month, N(r.edits), pct(r.bot_share, 1)]),
+  [1, 1, 1], { size: 18, alignAll: AlignmentType.CENTER }));
+children.push(p(""));
+children.push(p(
   `One reconciliation is worth stating. The RDD phase counts ${N(botAgg.edits)} bot edits against ${N(prep.bot_edits)} from the DataFrame phase. The difference is exactly the ${N(prep.null_key_rows_removed)} rows the DataFrame path discards for null structural keys; the RDD phase reads the raw dump before that filter. The two numbers are consistent, not contradictory.`
 ));
 
+// ------------------------------------------------- 6 ANALYTICS WORKFLOW
+children.push(h1("6. Spark Analytics Workflow"));
+children.push(p(
+  "The assignment requires an explicit pipeline of the form Input Data to RDD Processing to DataFrame Processing to Analytical Output. The implemented workflow follows that shape, with every stage persisting its result so that any stage can be re-run in isolation."
+));
+children.push(...code([
+  'INPUT DATA           simplewiki.all-time.tsv.bz2',
+  '                     951 MB bz2 TSV, 78 columns, ' + N(ing.raw_rows) + ' rows',
+  '                            |',
+  '                            v',
+  'RDD PROCESSING       sc.textFile(minPartitions=24) -> ' + rdd.num_partitions + ' partitions',
+  '   src/pb_rdd.py     map(parse) -> filter(entity=="revision")',
+  '                     persist(MEMORY_AND_DISK)',
+  '                     flatMap(tokens) -> reduceByKey(add)',
+  '                            |',
+  '                            v',
+  'DATAFRAME PROCESSING p00_ingest.py   TSV -> Parquet, ' + ing.columns_kept + ' of 78 cols',
+  '   src/p03_prepare   p03_prepare.py  dedup, coalesce, impute, label',
+  '   src/pc_sql.py     createOrReplaceTempView("wikimedia_edits")',
+  '                     groupBy / agg / orderBy  +  spark.sql(...)',
+  '                            |',
+  '                            v',
+  'ANALYTICAL OUTPUT    word frequencies      ' + N(rdd.total_comment_tokens) + ' tokens',
+  '                     namespace aggregates  revert + bot rates',
+  '                     temporal trends       yearly and monthly',
+  '                     MLlib models          ROC-AUC ' + f4(best.roc_auc),
+  '                     reports/metrics/*.json -> deck and this report',
+], "Pipeline: Input -> RDD -> DataFrame -> Output"));
+children.push(p(
+  "Two properties of this layout matter. First, the RDD branch and the DataFrame branch read the *same* source but serve different purposes: the RDD path demonstrates low-level transformations and produces the word-frequency and actor-class analyses, while the DataFrame path produces the cleaned, typed table that the SQL queries and the models consume. Running both on identical input is what allows the counts in Sections 4 and 5 to be cross-checked against one another."
+));
+children.push(p(
+  "Second, every stage writes Parquet before the next begins. A change to feature engineering re-runs in minutes rather than repeating the bz2 decompression upstream, and the document generators read only the JSON metrics, so the deck and this report rebuild in seconds without starting Spark at all."
+));
+children.push(table(["Stage", "Script", "Reads", "Writes"], [
+  ["Ingest", "`p00_ingest.py`", "raw bz2 TSV", "`data/parquet/revisions/`"],
+  ["RDD analytics", "`pb_rdd.py`", "raw bz2 TSV", "`metrics/pb_rdd.json`"],
+  ["Prepare", "`p03_prepare.py`", "`revisions/`", "`data/parquet/prepared/`"],
+  ["SQL analytics", "`pc_sql.py`", "`prepared/`", "`metrics/pc_sql.json`"],
+  ["Features", "`p04_features.py`", "`prepared/`", "`data/features/`"],
+  ["Models", "`p05_*.py`", "`features/`", "`metrics/p05_*.json`"],
+  ["Streaming", "`pe_streaming.py`", "`prepared/` (replay)", "`metrics/pe_streaming.json`"],
+], [1, 1.3, 1.2, 1.6], { size: 17 }));
+children.push(p(""));
+
 // ---------------------------------------------- 8 STRUCTURED STREAMING
-children.push(h1("6. Structured Streaming"));
+children.push(h1("7. Structured Streaming"));
 children.push(p(
   "The streaming phase (`src/pe_streaming.py`) demonstrates incremental processing. A producer thread writes bursts of real revision records as JSON files into a watch directory; Spark reads that directory as a **file source**, processing each file as a micro-batch."
 ));
@@ -462,7 +514,7 @@ children.push(...code([
 children.push(p(
   "A schema must be supplied explicitly: Structured Streaming cannot infer one, because inference requires reading data that has not arrived yet. Two queries run concurrently against the same stream — a `foreachBatch` sink computing per-batch and running totals, and a windowed aggregation over **event time** rather than arrival time, bounded by a watermark that limits how long state is retained for late records."
 ));
-children.push(h2("6.1 Run results"));
+children.push(h2("7.1 Run results"));
 children.push(table(["Property", "Value"], [
   ["Source", str.source],
   ["Trigger", str.trigger],
@@ -485,14 +537,38 @@ children.push(p(""));
 children.push(p(
   "The windowed output reproduces, incrementally, the rise in automated editing that the batch temporal aggregation shows — bot share climbing year on year across the replayed window. That the streaming and batch paths agree on the same corpus is the useful cross-check."
 ));
-children.push(h2("6.2 A partitioning bug surfaced by streaming"));
+children.push(h2("7.2 Console output of the run"));
+children.push(p(
+  "The micro-batch sink prints each batch as it completes. The bot share climbs across the run because the replay is chronological: early batches are 2001-era edits, later batches recent ones."
+));
+children.push(...code([
+  '  [producer] sampled 200,000 edits (44.1% bot)',
+  '  [producer] burst 0 (10,000 edits)',
+  '  BATCH 0: rows=10,000 bot=1,945 (19.4%) | running bot rate 19.45%',
+  '  BATCH 1: rows=10,000 bot=3,891 (38.9%) | running bot rate 29.18%',
+  '  BATCH 5: rows=10,000 bot=4,014 (40.1%) | running bot rate 32.39%',
+  '  BATCH 10: rows=10,000 bot=5,083 (50.8%) | running bot rate 38.57%',
+  '  BATCH 13: rows=10,000 bot=5,489 (54.9%) | running bot rate 41.52%',
+  '  BATCH 19: rows=10,000 bot=6,404 (64.0%) | running bot rate 44.11%',
+  '',
+  '  event-time windows produced: ' + str.event_time_windows.length,
+  '    2002:    172 edits, bot share  1.7%',
+  '    2003:    906 edits, bot share 10.7%',
+  '    2004:  2,647 edits, bot share 14.1%',
+  '    2005:  9,363 edits, bot share 26.1%',
+], "make streaming"));
+children.push(p(
+  `The running rate converges on ${pct(str.running_bot_rate, 2)}, which matches the 44.1% bot share of the sampled replay set measured before streaming began. The streaming path and the batch path agree on the same corpus, which is the useful cross-check.`
+));
+
+children.push(h2("7.3 A partitioning bug surfaced by streaming"));
 children.push(p(
   "The first run reported a bot rate of exactly zero in every micro-batch. The cause was not in the streaming code. The prepared dataset is written with `partitionBy(\"label_bot\")`, so it is laid out on disk as two directories. A `.limit()` over that dataset reads whole partition directories in order, and the `label_bot=0` directory alone holds more rows than the replay required — so the sample never reached the bot partition."
 ));
 children.push(p(
   "The fix samples across all partitions before ordering by event time. The general lesson is that `limit()`, `head()` and `take()` are not random samples; on partitioned data they return whatever the first partitions happen to contain, and if the data is partitioned by the very column under measurement, the result is perfectly biased with no error raised."
 ));
-children.push(h2("6.3 Live ingestion"));
+children.push(h2("7.4 Live ingestion"));
 children.push(p(
   "A separate collector (`src/stream_collector.py`) holds a long-lived HTTP connection to the Wikimedia Recent Changes feed, which publishes every edit across all projects over Server-Sent Events, and appends selected fields as JSON Lines. A 30-second run captured **910 events**, of which 413 carried `\"bot\": true` — confirming both the ~30 events/second platform rate quoted in Section 1 and that the bot label used for supervised training is present on the live feed."
 ));
@@ -501,15 +577,15 @@ children.push(p(
 ));
 
 // --------------------------------------------- 9 RESULTS AND DISCUSSION
-children.push(h1("7. Results and Discussion"));
-children.push(h2("7.1 Analytical findings"));
+children.push(h1("8. Results and Discussion"));
+children.push(h2("8.1 Analytical findings"));
 children.push(...bullets([
   `**Revert rate separates actor classes sharply.** Anonymous contributors are reverted at ${pct(seg["anonymous"].revert_rate, 2)}, registered humans at ${pct(seg["registered human"].revert_rate, 2)}, and automated accounts at ${pct(seg["bot"].revert_rate, 2)}. Automation is the least contested category on the platform.`,
   `**Automation is concentrated by namespace.** Category space is ${pct(sql.namespaces.find((r) => r.namespace === 14).bot_share, 1)} automated against a corpus average of ${pct(prep.bot_rate, 1)}, and has the lowest revert rate of the major namespaces.`,
   `**Activity peaked in ${sql.peak_year.year}** at ${N(sql.peak_year.edits)} edits, ${pct(sql.peak_year.bot_share, 1)} of them automated.`,
   `**Comment vocabulary is maintenance vocabulary.** The leading tokens across ${N(rdd.total_comment_tokens)} are \`${rdd.top_comment_words.slice(0, 4).map((k) => k[0]).join("`, `")}\`.`,
 ]));
-children.push(h2("7.2 Modelling results"));
+children.push(h2("8.2 Modelling results"));
 children.push(p(
   `MLlib was used to test whether automated editing is predictable from behaviour. The evaluation is **actor-disjoint**: the actor key is hashed into disjoint buckets so that ${N(clf.n_train)} training rows and ${N(clf.n_test)} test rows share **zero accounts**. A random row split would place the same high-volume bot in both folds, letting a model memorise per-account cadence and report an inflated score. Identity columns are excluded, and the scaler sits inside the ML Pipeline so it is fitted on the training fold alone.`
 ));
@@ -529,7 +605,7 @@ children.push(p(
 children.push(p(
   `Comment text matters only to the linear model, where it is transformative: logistic regression improves from ROC-AUC ${f4(lrS.roc_auc)} to ${f4(lrF.roc_auc)} and from PR-AUC ${f4(lrS.pr_auc)} to ${f4(lrF.pr_auc)}. The tree ensembles already capture, through split interactions, the structure that the SVD dimensions merely make linearly separable. The ablation therefore measures model capacity as much as feature value — a caveat that would have gone undetected had each model been trained once.`
 ));
-children.push(h2("7.3 Clustering: a negative result"));
+children.push(h2("8.3 Clustering: a negative result"));
 children.push(p(
   `Unsupervised clustering over ${N(clu.n_editors_clustered)} editors with at least ${clu.min_edits} edits selected ${clu.best} at silhouette ${f4(clu.best_silhouette)} — weak separation. The requested k was ${clu.best_k_requested} but only ${clu.best_k_nonempty} clusters were non-empty; at k = 2 the same algorithm degenerated to a single cluster and was skipped by an explicit guard, since \`ClusteringEvaluator\` otherwise aborts the entire sweep.`
 ));
@@ -539,7 +615,7 @@ children.push(p(
 children.push(p(
   `The informative measure is enrichment. Automated accounts are **${clu.bot_max_enrichment.toFixed(2)} times over-represented** in the high-activity cluster and under-represented in the low-activity one. That is a real effect in the expected direction, but modest, and adequately explained by bots being high-volume editors rather than by the clustering having identified automation as such.`
 ));
-children.push(h2("7.4 Observations on the Spark APIs"));
+children.push(h2("8.4 Observations on the Spark APIs"));
 children.push(table(["API", "Where it was the right tool", "Cost"], [
   ["RDD", "parsing a non-standard 78-field TSV; explicit control of partitioning and caching", "Python lambdas run row by row; no Catalyst optimisation"],
   ["DataFrame", "cleaning, feature engineering, aggregation", "schema must be stated or inferred up front"],
@@ -551,7 +627,7 @@ children.push(p(""));
 children.push(p(
   "Two measurements frame the trade-off. The RDD parse of 11 million rows took 61.1 seconds, while the equivalent DataFrame aggregation over the cleaned Parquet took " + sql.df_api_seconds.toFixed(2) + " seconds. The comparison is not like for like — the RDD job decompresses and parses raw text while the DataFrame job reads a columnar store — but it shows precisely why the pipeline converts to Parquet once and queries it repeatedly."
 ));
-children.push(h2("7.5 Scalability and limitations"));
+children.push(h2("8.5 Scalability and limitations"));
 children.push(p(
   "Spark is justified here by the shape of the workload rather than the size of the file. The per-editor aggregation regroups 11 million revisions by " + N(feat.n_editors) + " actors and computes windowed inter-edit intervals — a sort-merge shuffle whose working set scales with distinct actors, not with available memory."
 ));
@@ -564,7 +640,7 @@ children.push(...bullets([
 ]));
 
 // ---------------------------------------------------------- 10 CONCLUSION
-children.push(h1("8. Conclusion"));
+children.push(h1("9. Conclusion"));
 children.push(p(
   `This assignment implemented a complete Spark pipeline over ${N(prep.rows_final)} real Wikimedia revisions, exercising all four programming interfaces on one corpus. The RDD API parsed the raw compressed dump across ${rdd.num_partitions} partitions and produced word-frequency and actor-class analyses over ${N(rdd.total_comment_tokens)} comment tokens. The DataFrame API and Spark SQL answered aggregate questions over a cleaned Parquet table, confirming that both compile to the same Catalyst plan. Structured Streaming consumed ${N(str.rows_processed)} records in ${str.batches_processed} micro-batches with watermarked event-time windows. MLlib trained six classification configurations and twenty-one clustering configurations.`
 ));
@@ -574,7 +650,7 @@ children.push(p(
 children.push(p(
   "Three engineering lessons generalise beyond this dataset. Published schemas may not match shipped data, and verifying column order empirically cost less than debugging a misaligned pipeline would have. Lazy evaluation means every action replays lineage from source, so a single `persist` turned five re-parses into seconds. And a validation metric must always be read against its own baseline — a cluster purity of " + f4(clu.bot_purity) + " looked like success and was identical to guessing the majority class."
 ));
-children.push(h2("8.1 Future scope"));
+children.push(h2("9.1 Future scope"));
 children.push(...bullets([
   "Execute on a multi-node cluster and measure realised speed-up rather than arguing it from stage behaviour.",
   "Connect the live EventStreams collector directly to the Structured Streaming consumer with file rotation, and score arriving edits with the trained model.",
@@ -584,7 +660,7 @@ children.push(...bullets([
 ]));
 
 // --------------------------------------------------------- 11 REFERENCES
-children.push(h1("9. References"));
+children.push(h1("10. References"));
 const refs = [
   "Wikimedia Foundation. MediaWiki History Dumps, snapshot 2026-10. https://dumps.wikimedia.org/other/mediawiki_history/ (CC0).",
   "Wikimedia Foundation. EventStreams. https://stream.wikimedia.org/v2/stream/recentchange",
