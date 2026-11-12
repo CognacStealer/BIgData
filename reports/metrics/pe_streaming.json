@@ -1,0 +1,279 @@
+{
+  "source": "file source (JSON), maxFilesPerTrigger=1",
+  "trigger": "processingTime=2 seconds",
+  "bursts": 20,
+  "rows_per_burst": 10000,
+  "batches_processed": 20,
+  "rows_processed": 200000,
+  "running_bot_rate": 0.44107,
+  "running_reverted_rate": 0.10507,
+  "batches": [
+    {
+      "batch_id": 0,
+      "rows": 10000,
+      "bot": 1945,
+      "reverted": 1322,
+      "bot_rate": 0.1945,
+      "avg_bytes_diff": 586.0469,
+      "running_rows": 10000,
+      "running_bot_rate": 0.1945
+    },
+    {
+      "batch_id": 1,
+      "rows": 10000,
+      "bot": 3891,
+      "reverted": 1287,
+      "bot_rate": 0.3891,
+      "avg_bytes_diff": 376.0118,
+      "running_rows": 20000,
+      "running_bot_rate": 0.2918
+    },
+    {
+      "batch_id": 2,
+      "rows": 10000,
+      "bot": 3267,
+      "reverted": 1286,
+      "bot_rate": 0.3267,
+      "avg_bytes_diff": 348.9202,
+      "running_rows": 30000,
+      "running_bot_rate": 0.30343333333333333
+    },
+    {
+      "batch_id": 3,
+      "rows": 10000,
+      "bot": 2795,
+      "reverted": 1288,
+      "bot_rate": 0.2795,
+      "avg_bytes_diff": 382.9307,
+      "running_rows": 40000,
+      "running_bot_rate": 0.29745
+    },
+    {
+      "batch_id": 4,
+      "rows": 10000,
+      "bot": 3519,
+      "reverted": 1103,
+      "bot_rate": 0.3519,
+      "avg_bytes_diff": 454.8828,
+      "running_rows": 50000,
+      "running_bot_rate": 0.30834
+    },
+    {
+      "batch_id": 5,
+      "rows": 10000,
+      "bot": 4014,
+      "reverted": 1255,
+      "bot_rate": 0.4014,
+      "avg_bytes_diff": 750.5511,
+      "running_rows": 60000,
+      "running_bot_rate": 0.32385
+    },
+    {
+      "batch_id": 6,
+      "rows": 10000,
+      "bot": 4242,
+      "reverted": 1243,
+      "bot_rate": 0.4242,
+      "avg_bytes_diff": 519.392,
+      "running_rows": 70000,
+      "running_bot_rate": 0.3381857142857143
+    },
+    {
+      "batch_id": 7,
+      "rows": 10000,
+      "bot": 4414,
+      "reverted": 1147,
+      "bot_rate": 0.4414,
+      "avg_bytes_diff": 330.9136,
+      "running_rows": 80000,
+      "running_bot_rate": 0.3510875
+    },
+    {
+      "batch_id": 8,
+      "rows": 10000,
+      "bot": 4598,
+      "reverted": 1164,
+      "bot_rate": 0.4598,
+      "avg_bytes_diff": 370.3377,
+      "running_rows": 90000,
+      "running_bot_rate": 0.3631666666666667
+    },
+    {
+      "batch_id": 9,
+      "rows": 10000,
+      "bot": 4662,
+      "reverted": 1121,
+      "bot_rate": 0.4662,
+      "avg_bytes_diff": 304.7365,
+      "running_rows": 100000,
+      "running_bot_rate": 0.37347
+    },
+    {
+      "batch_id": 10,
+      "rows": 10000,
+      "bot": 5083,
+      "reverted": 1028,
+      "bot_rate": 0.5083,
+      "avg_bytes_diff": 331.0994,
+      "running_rows": 110000,
+      "running_bot_rate": 0.38572727272727275
+    },
+    {
+      "batch_id": 11,
+      "rows": 10000,
+      "bot": 5060,
+      "reverted": 1121,
+      "bot_rate": 0.506,
+      "avg_bytes_diff": 541.9367,
+      "running_rows": 120000,
+      "running_bot_rate": 0.39575
+    },
+    {
+      "batch_id": 12,
+      "rows": 10000,
+      "bot": 5150,
+      "reverted": 964,
+      "bot_rate": 0.515,
+      "avg_bytes_diff": 296.9653,
+      "running_rows": 130000,
+      "running_bot_rate": 0.40492307692307694
+    },
+    {
+      "batch_id": 13,
+      "rows": 10000,
+      "bot": 5489,
+      "reverted": 870,
+      "bot_rate": 0.5489,
+      "avg_bytes_diff": 244.015,
+      "running_rows": 140000,
+      "running_bot_rate": 0.41520714285714283
+    },
+    {
+      "batch_id": 14,
+      "rows": 10000,
+      "bot": 4966,
+      "reverted": 960,
+      "bot_rate": 0.4966,
+      "avg_bytes_diff": 236.5409,
+      "running_rows": 150000,
+      "running_bot_rate": 0.42063333333333336
+    },
+    {
+      "batch_id": 15,
+      "rows": 10000,
+      "bot": 3835,
+      "reverted": 842,
+      "bot_rate": 0.3835,
+      "avg_bytes_diff": 233.4227,
+      "running_rows": 160000,
+      "running_bot_rate": 0.4183125
+    },
+    {
+      "batch_id": 16,
+      "rows": 10000,
+      "bot": 4426,
+      "reverted": 797,
+      "bot_rate": 0.4426,
+      "avg_bytes_diff": 188.0393,
+      "running_rows": 170000,
+      "running_bot_rate": 0.41974117647058823
+    },
+    {
+      "batch_id": 17,
+      "rows": 10000,
+      "bot": 5330,
+      "reverted": 827,
+      "bot_rate": 0.533,
+      "avg_bytes_diff": 94.2934,
+      "running_rows": 180000,
+      "running_bot_rate": 0.4260333333333333
+    },
+    {
+      "batch_id": 18,
+      "rows": 10000,
+      "bot": 5124,
+      "reverted": 830,
+      "bot_rate": 0.5124,
+      "avg_bytes_diff": 25.481,
+      "running_rows": 190000,
+      "running_bot_rate": 0.43057894736842106
+    },
+    {
+      "batch_id": 19,
+      "rows": 10000,
+      "bot": 6404,
+      "reverted": 559,
+      "bot_rate": 0.6404,
+      "avg_bytes_diff": -276.1091,
+      "running_rows": 200000,
+      "running_bot_rate": 0.44107
+    }
+  ],
+  "event_time_windows": [
+    {
+      "year": "2000",
+      "edits": 1,
+      "bot_share": 0.0
+    },
+    {
+      "year": "2001",
+      "edits": 5,
+      "bot_share": 0.0
+    },
+    {
+      "year": "2002",
+      "edits": 172,
+      "bot_share": 0.01744186046511628
+    },
+    {
+      "year": "2003",
+      "edits": 906,
+      "bot_share": 0.10706401766004416
+    },
+    {
+      "year": "2004",
+      "edits": 2647,
+      "bot_share": 0.1409142425387231
+    },
+    {
+      "year": "2005",
+      "edits": 9363,
+      "bot_share": 0.26145466196731815
+    },
+    {
+      "year": "2006",
+      "edits": 18162,
+      "bot_share": 0.35502697940755423
+    },
+    {
+      "year": "2007",
+      "edits": 28193,
+      "bot_share": 0.35256978682651724
+    },
+    {
+      "year": "2008",
+      "edits": 30711,
+      "bot_share": 0.4385399368304516
+    },
+    {
+      "year": "2009",
+      "edits": 29694,
+      "bot_share": 0.4937697851417795
+    },
+    {
+      "year": "2010",
+      "edits": 29193,
+      "bot_share": 0.5179666358373582
+    },
+    {
+      "year": "2011",
+      "edits": 35210,
+      "bot_share": 0.45864811133200795
+    },
+    {
+      "year": "2012",
+      "edits": 15743,
+      "bot_share": 0.6037604014482627
+    }
+  ]
+}

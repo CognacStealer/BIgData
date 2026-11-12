@@ -24,6 +24,19 @@ cluster: ## Phase 5b: clustering
 figures: ## Phase 6: figures and tables
 	source env.sh && $(PY) -u src/run_all.py --only p06_report
 
+rdd: ## RDD-based processing over the raw dump
+	source env.sh && $(PY) -u src/pb_rdd.py
+sql: ## DataFrame + Spark SQL analytics
+	source env.sh && $(PY) -u src/pc_sql.py
+streaming: ## Structured Streaming replay (20 bursts x 10k)
+	source env.sh && $(PY) -u src/pe_streaming.py --batches 20 --rows 10000
+
+report-a2: ## build the Assignment 2 technical report (.docx + .pdf)
+	node src/make_report_a2.js
+	@zip -d reports/Assignment2_Spark_Report.docx '*/' >/dev/null 2>&1 || true
+	@/opt/libreoffice26.8/program/soffice --headless --convert-to pdf \
+	   --outdir reports reports/Assignment2_Spark_Report.docx >/dev/null 2>&1 || true
+
 report: ## build the final report (.docx + .pdf) from reports/metrics
 	node src/make_report.js
 	@zip -d reports/MMDS_EndSem_Report.docx '*/' >/dev/null 2>&1 || true

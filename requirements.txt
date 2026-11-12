@@ -8,11 +8,10 @@ matplotlib
 seaborn
 scikit-learn
 
-# Live EventStreams demo collector
+# Live EventStreams demo collector (SSE parsed with requests.iter_lines)
 requests
-sseclient-py
 
-# Presentation generator (src/make_ppt.py)
+# Presentation generator (src/make_ppt.py); python-pptx pulls in lxml
 python-pptx
 
 # The report generator (src/make_report.js) is Node, not Python:

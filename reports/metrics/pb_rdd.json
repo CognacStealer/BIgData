@@ -1,0 +1,209 @@
+{
+  "num_partitions": 30,
+  "num_revisions": 11023987,
+  "top_namespaces": [
+    [
+      "0",
+      7821994
+    ],
+    [
+      "3",
+      894246
+    ],
+    [
+      "14",
+      661036
+    ],
+    [
+      "2",
+      552165
+    ],
+    [
+      "10",
+      402717
+    ],
+    [
+      "4",
+      401355
+    ],
+    [
+      "1",
+      200233
+    ],
+    [
+      "11",
+      28534
+    ],
+    [
+      "828",
+      21335
+    ],
+    [
+      "5",
+      19230
+    ]
+  ],
+  "top_editors": [
+    [
+      "Auntof6",
+      335023
+    ],
+    [
+      "TDKR Chicago 101",
+      262741
+    ],
+    [
+      "Djsasso",
+      257359
+    ],
+    [
+      "MathXplore",
+      193377
+    ],
+    [
+      "InternetArchiveBot",
+      170419
+    ],
+    [
+      "EmausBot",
+      160591
+    ],
+    [
+      "Luckas-bot",
+      135634
+    ],
+    [
+      "TXiKiBoT",
+      133713
+    ],
+    [
+      "ChenzwBot",
+      129219
+    ],
+    [
+      "Addbot",
+      119877
+    ],
+    [
+      "Macdonald-ross",
+      114637
+    ],
+    [
+      "Ferien",
+      105073
+    ],
+    [
+      "Osiris",
+      104959
+    ],
+    [
+      "Cyberbot I",
+      104867
+    ],
+    [
+      "MerlIwBot",
+      97591
+    ]
+  ],
+  "total_comment_tokens": 51663267,
+  "top_comment_words": [
+    [
+      "robot",
+      1615801
+    ],
+    [
+      "adding",
+      1428633
+    ],
+    [
+      "talk",
+      1131878
+    ],
+    [
+      "category",
+      1069091
+    ],
+    [
+      "user",
+      824609
+    ],
+    [
+      "hotcat",
+      765561
+    ],
+    [
+      "help",
+      705477
+    ],
+    [
+      "special",
+      609130
+    ],
+    [
+      "contributions",
+      536464
+    ],
+    [
+      "awb",
+      531584
+    ],
+    [
+      "reverted",
+      437774
+    ],
+    [
+      "bot",
+      421946
+    ],
+    [
+      "gadget",
+      382818
+    ],
+    [
+      "last",
+      379531
+    ],
+    [
+      "created",
+      340094
+    ],
+    [
+      "version",
+      327259
+    ],
+    [
+      "project",
+      292627
+    ],
+    [
+      "template",
+      282861
+    ],
+    [
+      "modifying",
+      281622
+    ],
+    [
+      "edits",
+      271868
+    ]
+  ],
+  "by_bot": {
+    "human": {
+      "edits": 8419962,
+      "reverted": 1350737,
+      "bytes_added": 4660256877,
+      "revert_rate": 0.1604207952482446
+    },
+    "bot": {
+      "edits": 2604025,
+      "reverted": 200178,
+      "bytes_added": 504345684,
+      "revert_rate": 0.07687253386584231
+    }
+  },
+  "anonymous_edits": 2044198,
+  "anonymous_reverted": 749742,
+  "anonymous_revert_rate": 0.36676584166504417,
+  "num_jobs_note": "one Spark job per action; the parse is shared via persist()"
+}

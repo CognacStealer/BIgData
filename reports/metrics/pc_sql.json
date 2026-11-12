@@ -1,0 +1,288 @@
+{
+  "rows": 10987077,
+  "columns": 31,
+  "df_api_seconds": 0.8548047542572021,
+  "namespaces": [
+    {
+      "namespace": 0,
+      "name": "Article",
+      "edits": 7799888,
+      "bot_share": 0.2317,
+      "revert_rate": 0.1285
+    },
+    {
+      "namespace": 3,
+      "name": "User talk",
+      "edits": 893306,
+      "bot_share": 0.1849,
+      "revert_rate": 0.1115
+    },
+    {
+      "namespace": 14,
+      "name": "Category",
+      "edits": 659831,
+      "bot_share": 0.5353,
+      "revert_rate": 0.0367
+    },
+    {
+      "namespace": 2,
+      "name": "User",
+      "edits": 550127,
+      "bot_share": 0.2724,
+      "revert_rate": 0.2997
+    },
+    {
+      "namespace": 10,
+      "name": "Template",
+      "edits": 401997,
+      "bot_share": 0.2007,
+      "revert_rate": 0.102
+    },
+    {
+      "namespace": 4,
+      "name": "Project",
+      "edits": 401011,
+      "bot_share": 0.0727,
+      "revert_rate": 0.4573
+    },
+    {
+      "namespace": 1,
+      "name": "Talk",
+      "edits": 197564,
+      "bot_share": 0.0588,
+      "revert_rate": 0.1361
+    },
+    {
+      "namespace": 11,
+      "name": "other",
+      "edits": 28506,
+      "bot_share": 0.0176,
+      "revert_rate": 0.085
+    },
+    {
+      "namespace": 828,
+      "name": "other",
+      "edits": 21335,
+      "bot_share": 0.0088,
+      "revert_rate": 0.0448
+    },
+    {
+      "namespace": 5,
+      "name": "other",
+      "edits": 19151,
+      "bot_share": 0.018,
+      "revert_rate": 0.1269
+    }
+  ],
+  "sql_seconds": 0.9020650386810303,
+  "by_label_bot": [
+    {
+      "label_bot": 0,
+      "edits": 8388207,
+      "revert_rate": 0.161,
+      "avg_bytes_diff": 359.7
+    },
+    {
+      "label_bot": 1,
+      "edits": 2598870,
+      "revert_rate": 0.077,
+      "avg_bytes_diff": 85.9
+    }
+  ],
+  "by_year": [
+    {
+      "year": 2001,
+      "edits": 35,
+      "bot_share": 0.0
+    },
+    {
+      "year": 2002,
+      "edits": 141,
+      "bot_share": 0.0142
+    },
+    {
+      "year": 2003,
+      "edits": 3562,
+      "bot_share": 0.0146
+    },
+    {
+      "year": 2004,
+      "edits": 20394,
+      "bot_share": 0.1037
+    },
+    {
+      "year": 2005,
+      "edits": 60401,
+      "bot_share": 0.1404
+    },
+    {
+      "year": 2006,
+      "edits": 215232,
+      "bot_share": 0.2802
+    },
+    {
+      "year": 2007,
+      "edits": 402685,
+      "bot_share": 0.3467
+    },
+    {
+      "year": 2008,
+      "edits": 635411,
+      "bot_share": 0.3608
+    },
+    {
+      "year": 2009,
+      "edits": 661014,
+      "bot_share": 0.4423
+    },
+    {
+      "year": 2010,
+      "edits": 652059,
+      "bot_share": 0.4886
+    },
+    {
+      "year": 2011,
+      "edits": 646877,
+      "bot_share": 0.5253
+    },
+    {
+      "year": 2012,
+      "edits": 771344,
+      "bot_share": 0.4533
+    },
+    {
+      "year": 2013,
+      "edits": 606772,
+      "bot_share": 0.3548
+    },
+    {
+      "year": 2014,
+      "edits": 295234,
+      "bot_share": 0.0262
+    },
+    {
+      "year": 2015,
+      "edits": 320209,
+      "bot_share": 0.2137
+    },
+    {
+      "year": 2016,
+      "edits": 268392,
+      "bot_share": 0.0778
+    },
+    {
+      "year": 2017,
+      "edits": 345520,
+      "bot_share": 0.1114
+    },
+    {
+      "year": 2018,
+      "edits": 429161,
+      "bot_share": 0.1091
+    },
+    {
+      "year": 2019,
+      "edits": 377256,
+      "bot_share": 0.1364
+    },
+    {
+      "year": 2020,
+      "edits": 473457,
+      "bot_share": 0.0738
+    },
+    {
+      "year": 2021,
+      "edits": 693746,
+      "bot_share": 0.1607
+    },
+    {
+      "year": 2022,
+      "edits": 678115,
+      "bot_share": 0.0969
+    },
+    {
+      "year": 2023,
+      "edits": 662439,
+      "bot_share": 0.0735
+    },
+    {
+      "year": 2024,
+      "edits": 706097,
+      "bot_share": 0.067
+    },
+    {
+      "year": 2025,
+      "edits": 709674,
+      "bot_share": 0.0678
+    },
+    {
+      "year": 2026,
+      "edits": 351850,
+      "bot_share": 0.1517
+    }
+  ],
+  "peak_year": {
+    "year": 2012,
+    "edits": 771344,
+    "bot_share": 0.4533
+  },
+  "top_pages": [
+    {
+      "title": "Deaths_in_2020",
+      "edits": 8538
+    },
+    {
+      "title": "Deaths_in_2021",
+      "edits": 4934
+    },
+    {
+      "title": "United_States",
+      "edits": 4534
+    },
+    {
+      "title": "Deaths_in_2017",
+      "edits": 4230
+    },
+    {
+      "title": "Deaths_in_2019",
+      "edits": 3908
+    },
+    {
+      "title": "Wikipedia",
+      "edits": 3818
+    },
+    {
+      "title": "Deaths_in_2018",
+      "edits": 3670
+    },
+    {
+      "title": "Adolf_Hitler",
+      "edits": 3354
+    },
+    {
+      "title": "List_of_WWE_personnel",
+      "edits": 3348
+    },
+    {
+      "title": "Simple_English_Wikipedia",
+      "edits": 3292
+    }
+  ],
+  "segments": [
+    {
+      "segment": "registered human",
+      "edits": 6357719,
+      "revert_rate": 0.0945
+    },
+    {
+      "segment": "bot",
+      "edits": 2598870,
+      "revert_rate": 0.077
+    },
+    {
+      "segment": "anonymous",
+      "edits": 2030488,
+      "revert_rate": 0.3692
+    }
+  ]
+}
