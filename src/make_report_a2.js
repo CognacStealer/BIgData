@@ -257,6 +257,10 @@ children.push(table(["Component", "Role in this project"], [
   ["Partitions", `${rdd.num_partitions} on the raw bz2 read; 48 after every shuffle`],
 ], [1, 3], { size: 18 }));
 children.push(p(""));
+children.push(...figure("spark_architecture.png",
+  "Figure 1. Spark architecture. The driver builds the execution plan and the " +
+  "cluster manager allocates executors, which process partitions. Under " +
+  "local[*] all three live in one JVM as threads.", 5.9));
 children.push(h2("3.1 Deployment and configuration"));
 children.push(p(
   "The application runs in local mode on a single 12-core, 15 GB machine. Driver and executors are threads in one JVM. The code is unchanged for a real cluster; only the master URL and resource settings differ."
@@ -420,6 +424,23 @@ children.push(p(""));
 children.push(p(
   `Article space dominates with ${N(sql.namespaces[0].edits)} edits. The **Category** namespace stands out: ${pct(sql.namespaces.find((r) => r.namespace === 14).bot_share, 1)} of its edits are automated, more than double the corpus average, and its revert rate is the lowest of the major namespaces at ${pct(sql.namespaces.find((r) => r.namespace === 14).revert_rate, 1)}. Category maintenance is largely machine work and largely uncontested. **User** space shows the opposite pattern, with a ${pct(sql.namespaces.find((r) => r.namespace === 2).revert_rate, 1)} revert rate.`
 ));
+children.push(p(
+  "The same term-frequency question the RDD phase answers with `flatMap` and `reduceByKey` can be expressed declaratively, which lets the two APIs be compared on identical input:"
+));
+children.push(...code([
+  'SELECT word, COUNT(*) AS n',
+  'FROM (SELECT explode(split(lower(event_comment), \'[^a-z0-9]+\')) AS word',
+  '      FROM wikimedia_edits)',
+  'WHERE length(word) > 2',
+  'GROUP BY word ORDER BY n DESC LIMIT 15',
+], "Spark SQL — most frequent comment terms"));
+children.push(table(["Term", "Occurrences"],
+  (sql.top_terms_sql || []).slice(0, 8).map((r) => [`\`${r.word}\``, N(r.n)]),
+  [1.4, 1], { size: 18 }));
+children.push(p(""));
+children.push(p(
+  "The ranking agrees with the RDD result in Section 4.4. The counts differ slightly because the RDD pass removes a stop-word list and operates on the raw dump, while this query runs over the cleaned table; the point is that two different APIs over the same corpus produce the same ordering."
+));
 children.push(table(["Actor segment", "Edits", "Revert rate"],
   sql.segments.map((s) => [s.segment, N(s.edits), pct(s.revert_rate, 2)]),
   [1.4, 1, 1], { size: 18 }));
@@ -446,6 +467,10 @@ children.push(h1("6. Spark Analytics Workflow"));
 children.push(p(
   "The assignment requires an explicit pipeline of the form Input Data to RDD Processing to DataFrame Processing to Analytical Output. The implemented workflow follows that shape, with every stage persisting its result so that any stage can be re-run in isolation."
 ));
+children.push(...figure("spark_workflow.png",
+  "Figure 2. The Part D analytics workflow: Input Data to RDD Processing to " +
+  "DataFrame Processing to Analytical Output. The RDD and DataFrame branches " +
+  "read the same source and are cross-checked against one another.", 6.3));
 children.push(...code([
   'INPUT DATA           simplewiki.all-time.tsv.bz2',
   '                     951 MB bz2 TSV, 78 columns, ' + N(ing.raw_rows) + ' rows',

@@ -1,7 +1,7 @@
 {
   "rows": 10987077,
   "columns": 31,
-  "df_api_seconds": 1.1274898052215576,
+  "df_api_seconds": 1.0237748622894287,
   "namespaces": [
     {
       "namespace": 0,
@@ -74,7 +74,7 @@
       "revert_rate": 0.1269
     }
   ],
-  "sql_seconds": 1.1243476867675781,
+  "sql_seconds": 0.6606431007385254,
   "by_label_bot": [
     {
       "label_bot": 0,
@@ -448,6 +448,68 @@
     {
       "title": "Simple_English_Wikipedia",
       "edits": 3292
+    }
+  ],
+  "top_terms_sql": [
+    {
+      "word": "robot",
+      "n": 1616456
+    },
+    {
+      "word": "adding",
+      "n": 1428635
+    },
+    {
+      "word": "talk",
+      "n": 1142904
+    },
+    {
+      "word": "category",
+      "n": 1073908
+    },
+    {
+      "word": "page",
+      "n": 876507
+    },
+    {
+      "word": "user",
+      "n": 834792
+    },
+    {
+      "word": "using",
+      "n": 787273
+    },
+    {
+      "word": "hotcat",
+      "n": 765571
+    },
+    {
+      "word": "help",
+      "n": 705529
+    },
+    {
+      "word": "the",
+      "n": 668327
+    },
+    {
+      "word": "special",
+      "n": 609129
+    },
+    {
+      "word": "and",
+      "n": 593196
+    },
+    {
+      "word": "contributions",
+      "n": 536468
+    },
+    {
+      "word": "awb",
+      "n": 531664
+    },
+    {
+      "word": "reverted",
+      "n": 437775
     }
   ],
   "segments": [

@@ -110,6 +110,19 @@ def main():
     out["top_pages"] = [{"title": r["page_title"], "edits": r["edits"]} for r in pages]
     print("  top article:", out["top_pages"][0])
 
+    # ---- Spark SQL: most frequent comment terms (Part C example query) ---
+    # The RDD phase answers this with flatMap/reduceByKey; doing it again in
+    # SQL lets the two APIs be compared on an identical question.
+    terms = spark.sql("""
+        SELECT word, COUNT(*) AS n
+        FROM (SELECT explode(split(lower(event_comment), '[^a-z0-9]+')) AS word
+              FROM wikimedia_edits)
+        WHERE length(word) > 2
+        GROUP BY word ORDER BY n DESC LIMIT 15""").collect()
+    out["top_terms_sql"] = [{"word": r["word"], "n": r["n"]} for r in terms]
+    print("  top comment terms (SQL):",
+          ", ".join(f"{r['word']}={r['n']:,}" for r in terms[:5]))
+
     # ---- Spark SQL: anonymous vs registered vs bot -----------------------
     seg = spark.sql("""
         SELECT CASE WHEN label_bot = 1 THEN 'bot'
