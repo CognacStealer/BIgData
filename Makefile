@@ -54,7 +54,15 @@ report: ## build the final report (.docx + .pdf) from reports/metrics
 	    --outdir reports reports/MMDS_EndSem_Report.docx >/dev/null 2>&1 || \
 	  echo "(install LibreOffice to also emit the PDF)"
 
-ppt: ## build the presentation from reports/metrics (needs MMDS_TEMPLATE)
+ppt-a2: ## build the Assignment 2 deck (needs MMDS_TEMPLATE)
+	source env.sh && $(PY) -u src/make_ppt_a2.py
+	@/opt/libreoffice26.8/program/soffice --headless --convert-to pdf \
+	   --outdir reports reports/Assignment2_Spark_Analytics.pptx >/dev/null 2>&1 || true
+
+diagrams: ## render the architecture and workflow figures
+	source env.sh && $(PY) -u src/make_diagrams.py
+
+ppt: ## build the end-sem presentation (needs MMDS_TEMPLATE)
 	source env.sh && $(PY) -u src/make_ppt.py
 
 smoke: ## fast end-to-end check on a tiny real-data fixture

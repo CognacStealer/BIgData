@@ -205,5 +205,23 @@
   "anonymous_edits": 2044198,
   "anonymous_reverted": 749742,
   "anonymous_revert_rate": 0.36676584166504417,
+  "validation": [
+    {
+      "metric": "revision rows",
+      "rdd": 11023987,
+      "dataframe": 10987077,
+      "delta": 36910,
+      "expected": "RDD exceeds DF by the null-key rows dropped",
+      "ok": true
+    },
+    {
+      "metric": "bot edits",
+      "rdd": 2604025,
+      "dataframe": 2598870,
+      "delta": 5155,
+      "expected": "0 <= delta <= rows dropped",
+      "ok": true
+    }
+  ],
   "num_jobs_note": "one Spark job per action; the parse is shared via persist()"
 }

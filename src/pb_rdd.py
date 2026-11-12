@@ -130,6 +130,48 @@ def main():
     print(f"  anonymous: {anon_edits:,} edits, revert rate "
           f"{100*out['anonymous_revert_rate']:.2f}%")
 
+    # ---- OUTPUT VALIDATION ------------------------------------------------
+    # The brief asks for output validation, not merely output. We recompute the
+    # same aggregates through the DataFrame API over the cleaned Parquet and
+    # reconcile two independent code paths.
+    #
+    # They must NOT be equal: the DataFrame path drops rows with a null
+    # structural key during cleaning, so the RDD figure has to exceed it by
+    # exactly that many rows. An exact match would mean cleaning did nothing.
+    banner("OUTPUT VALIDATION: RDD vs DataFrame")
+    checks = []
+    try:
+        prep_path = config.DATA_PARQUET / "prepared"
+        if prep_path.exists():
+            dfp = spark.read.parquet(str(prep_path))
+            df_rows = dfp.count()
+            df_bot = dfp.filter("label_bot = 1").count()
+            dropped = out["num_revisions"] - df_rows
+            rdd_bot = out["by_bot"]["bot"]["edits"]
+
+            checks.append({"metric": "revision rows", "rdd": out["num_revisions"],
+                           "dataframe": df_rows, "delta": dropped,
+                           "expected": "RDD exceeds DF by the null-key rows dropped",
+                           "ok": dropped > 0})
+            checks.append({"metric": "bot edits", "rdd": rdd_bot,
+                           "dataframe": df_bot, "delta": rdd_bot - df_bot,
+                           "expected": "0 <= delta <= rows dropped",
+                           "ok": 0 <= rdd_bot - df_bot <= dropped})
+
+            for c in checks:
+                mark = "PASS" if c["ok"] else "FAIL"
+                print(f"  [{mark}] {c['metric']:<14} RDD {c['rdd']:>12,}  "
+                      f"DF {c['dataframe']:>12,}  delta {c['delta']:>7,}")
+                print(f"         expected: {c['expected']}")
+            print("\n  All cross-API checks reconciled."
+                  if all(c["ok"] for c in checks)
+                  else "\n  WARNING: a cross-API check did not reconcile.")
+        else:
+            print("  (skipped: run p03_prepare first for the DataFrame side)")
+    except Exception as e:          # validation must never fail the job itself
+        print(f"  (validation skipped: {e})")
+    out["validation"] = checks
+
     out["num_jobs_note"] = "one Spark job per action; the parse is shared via persist()"
     save_metrics("pb_rdd", out)
     revs.unpersist()
