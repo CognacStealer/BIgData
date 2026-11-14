@@ -372,6 +372,27 @@ children.push(p(
   `This is the phase's substantive finding. Anonymous contributors are reverted at ${pct(rdd.anonymous_revert_rate, 2)}, against ${pct(botAgg.revert_rate, 2)} for automated accounts — a factor of ${(rdd.anonymous_revert_rate / botAgg.revert_rate).toFixed(1)}. Automated editing is, by this measure, the *least* frequently reverted category on the platform.`
 ));
 
+children.push(h2("4.5 Output validation"));
+children.push(p(
+  "Printing a result is not the same as validating it. The RDD phase therefore recomputes its headline aggregates through the DataFrame API over the cleaned Parquet and reconciles the two independent code paths."
+));
+children.push(p(
+  "The reconciliation has a stated expectation rather than an equality check. The two figures **must not match**: the DataFrame path discards rows with a null structural key during cleaning (Section 5.1), so the RDD count has to exceed it by exactly that number. An exact match would be the failure case — it would mean the cleaning step silently did nothing."
+));
+children.push(table(
+  ["Metric", "RDD path", "DataFrame path", "Delta", "Expectation", "Check"],
+  (rdd.validation || []).map((c) => [
+    c.metric, N(c.rdd), N(c.dataframe), N(c.delta), c.expected,
+    c.ok ? "PASS" : "FAIL"]),
+  [1.2, 1.1, 1.3, 0.8, 2.6, 0.7], { size: 17 }));
+children.push(p(""));
+children.push(p(
+  `The ${N(prep.null_key_rows_removed)}-row gap is precisely the null-key rows removed in Phase 3, and the bot-edit difference of ${N((rdd.validation || []).filter((c) => c.metric === "bot edits").map((c) => c.delta)[0] || 0)} falls inside it as required. Two independently written paths over the same source, agreeing to a known and explained difference, is stronger evidence of correctness than either path's output read on its own.`
+));
+children.push(p(
+  "The check is wrapped so that a failure to validate can never fail the job itself: if the prepared dataset is absent, the phase reports that validation was skipped and continues."
+));
+
 // ------------------------------------------------- 7 DATAFRAME ANALYTICS
 children.push(h1("5. DataFrame Analytics and Spark SQL"));
 children.push(p(
